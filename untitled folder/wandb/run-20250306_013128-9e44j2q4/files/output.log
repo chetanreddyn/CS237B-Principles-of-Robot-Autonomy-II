@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/chetan/Desktop/Winter 2025/Courses/CS237B/Homeworks/Homework 3/CS237B_Win25_HW3/train_il.py", line 185, in <module>
+    nn_train(data, args,wandb_config_dict)
+  File "/Users/chetan/Desktop/Winter 2025/Courses/CS237B/Homeworks/Homework 3/CS237B_Win25_HW3/train_il.py", line 103, in nn_train
+    model = NN(in_size, out_size,wandb_config_dict)
+TypeError: NN.__init__() takes 3 positional arguments but 4 were given

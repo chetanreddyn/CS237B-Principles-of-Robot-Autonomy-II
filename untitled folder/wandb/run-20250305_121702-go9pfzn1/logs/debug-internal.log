@@ -1,0 +1,15 @@
+{"time":"2025-03-05T12:17:02.562056-08:00","level":"INFO","msg":"stream: starting","core version":"0.19.8","symlink path":"/Users/chetan/Desktop/Winter 2025/Courses/CS237B/Homeworks/Homework 3/CS237B_Win25_HW3/wandb/run-20250305_121702-go9pfzn1/logs/debug-core.log"}
+{"time":"2025-03-05T12:17:02.685668-08:00","level":"INFO","msg":"created new stream","id":"go9pfzn1"}
+{"time":"2025-03-05T12:17:02.685728-08:00","level":"INFO","msg":"stream: started","id":"go9pfzn1"}
+{"time":"2025-03-05T12:17:02.685801-08:00","level":"INFO","msg":"sender: started","stream_id":"go9pfzn1"}
+{"time":"2025-03-05T12:17:02.685928-08:00","level":"INFO","msg":"handler: started","stream_id":"go9pfzn1"}
+{"time":"2025-03-05T12:17:02.685784-08:00","level":"INFO","msg":"writer: Do: started","stream_id":"go9pfzn1"}
+{"time":"2025-03-05T12:17:02.872554-08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-03-05T12:24:07.491478-08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-03-05T12:24:07.491486-08:00","level":"INFO","msg":"stream: closing","id":"go9pfzn1"}
+{"time":"2025-03-05T12:24:07.493206-08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-03-05T12:24:07.897956-08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-03-05T12:24:08.076298-08:00","level":"INFO","msg":"handler: closed","stream_id":"go9pfzn1"}
+{"time":"2025-03-05T12:24:08.076506-08:00","level":"INFO","msg":"sender: closed","stream_id":"go9pfzn1"}
+{"time":"2025-03-05T12:24:08.076364-08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"go9pfzn1"}
+{"time":"2025-03-05T12:24:08.077146-08:00","level":"INFO","msg":"stream: closed","id":"go9pfzn1"}

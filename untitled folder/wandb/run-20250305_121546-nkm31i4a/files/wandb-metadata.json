@@ -1,0 +1,51 @@
+{
+  "os": "macOS-10.16-x86_64-i386-64bit",
+  "python": "CPython 3.10.16",
+  "startedAt": "2025-03-05T20:15:46.245767Z",
+  "args": [
+    "--wandb_log",
+    "--goal",
+    "left",
+    "--activation",
+    "relu"
+  ],
+  "program": "/Users/chetan/Desktop/Winter 2025/Courses/CS237B/Homeworks/Homework 3/CS237B_Win25_HW3/train_il.py",
+  "codePath": "train_il.py",
+  "git": {
+    "remote": "https://github.com/PrinciplesofRobotAutonomy/CS237B_Win25_HW3.git",
+    "commit": "1c8253c3b90a77e1f3eadce6798f1866acc88bac"
+  },
+  "email": "chetanreddy1412@gmail.com",
+  "root": "/Users/chetan/Desktop/Winter 2025/Courses/CS237B/Homeworks/Homework 3/CS237B_Win25_HW3",
+  "host": "DN51t4oa.SUNet",
+  "executable": "/Users/chetan/opt/anaconda3/envs/cs237b/bin/python",
+  "codePathLocal": "train_il.py",
+  "cpu_count": 8,
+  "cpu_count_logical": 8,
+  "disk": {
+    "/": {
+      "total": "494384795648",
+      "used": "474666676224"
+    },
+    "/System/Volumes/Data": {
+      "total": "494384795648",
+      "used": "474666676224"
+    }
+  },
+  "memory": {
+    "total": "17179869184"
+  },
+  "cpu": {
+    "count": 8,
+    "countLogical": 8
+  },
+  "apple": {
+    "name": "Unknown",
+    "ecpuCores": 4,
+    "pcpuCores": 4,
+    "gpuCores": 8,
+    "memoryGb": 16,
+    "swapTotalBytes": "1073741824",
+    "ramTotalBytes": "17179869184"
+  }
+}
