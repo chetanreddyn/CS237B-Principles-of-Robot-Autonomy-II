@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/chetan/Desktop/CS237B/Homeworks/CS237B-Principles-of-Robot-Autonomy-II/Imitation Learning/train_il.py", line 185, in <module>
+    nn_train(data, args,wandb_config_dict)
+  File "/home/chetan/Desktop/CS237B/Homeworks/CS237B-Principles-of-Robot-Autonomy-II/Imitation Learning/train_il.py", line 103, in nn_train
+    model = NN(in_size, out_size,wandb_config_dict)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: NN.__init__() takes 3 positional arguments but 4 were given

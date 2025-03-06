@@ -1,0 +1,15 @@
+{"time":"2025-03-06T02:41:52.401037125-08:00","level":"INFO","msg":"stream: starting","core version":"0.19.8","symlink path":"/home/chetan/Desktop/CS237B/Homeworks/CS237B-Principles-of-Robot-Autonomy-II/Imitation Learning/wandb/run-20250306_024152-y0lrnfqc/logs/debug-core.log"}
+{"time":"2025-03-06T02:41:54.119950269-08:00","level":"INFO","msg":"created new stream","id":"y0lrnfqc"}
+{"time":"2025-03-06T02:41:54.120018568-08:00","level":"INFO","msg":"stream: started","id":"y0lrnfqc"}
+{"time":"2025-03-06T02:41:54.120150867-08:00","level":"INFO","msg":"writer: Do: started","stream_id":"y0lrnfqc"}
+{"time":"2025-03-06T02:41:54.120264888-08:00","level":"INFO","msg":"sender: started","stream_id":"y0lrnfqc"}
+{"time":"2025-03-06T02:41:54.120446785-08:00","level":"INFO","msg":"handler: started","stream_id":"y0lrnfqc"}
+{"time":"2025-03-06T02:41:54.347493081-08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-03-06T02:45:51.003386553-08:00","level":"INFO","msg":"stream: closing","id":"y0lrnfqc"}
+{"time":"2025-03-06T02:45:51.003623554-08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-03-06T02:45:51.00454363-08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-03-06T02:45:51.407163119-08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-03-06T02:45:51.538659652-08:00","level":"INFO","msg":"handler: closed","stream_id":"y0lrnfqc"}
+{"time":"2025-03-06T02:45:51.538775555-08:00","level":"INFO","msg":"sender: closed","stream_id":"y0lrnfqc"}
+{"time":"2025-03-06T02:45:51.538760703-08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"y0lrnfqc"}
+{"time":"2025-03-06T02:45:51.539009068-08:00","level":"INFO","msg":"stream: closed","id":"y0lrnfqc"}

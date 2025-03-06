@@ -7,6 +7,7 @@ import torch.optim as optim
 from torch.utils.data import TensorDataset, DataLoader
 from utils import load_data, maybe_makedirs
 import os
+import time
 
 import pdb
 import wandb
@@ -91,17 +92,16 @@ def nn_train(data, args,wandb_config_dict):
     params = {
         'train_batch_size': wandb_config_dict['train_batch_size'],
     }
-    wandb.init(project="CS237B Imitation Learning",
-               config=wandb_config_dict,
-               )
+
 
     x_train = torch.tensor(data["x_train"])
     y_train = torch.tensor(data["y_train"])
     in_size = x_train.shape[-1]
     out_size = y_train.shape[-1]
     
-    model = NN(in_size, out_size,wandb_config_dict)
+    model = NN(in_size, out_size)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print("Using Device: ",device)
     model.to(device)
 
     policy_path = os.path.join("policies", f"{args.scenario.lower()}_{args.goal.lower()}_IL.pt")
@@ -117,46 +117,59 @@ def nn_train(data, args,wandb_config_dict):
     train_loader = DataLoader(dataset, batch_size=params['train_batch_size'], shuffle=True)
     # pdb.set_trace()
 
+    wandb_config_dict['device'] = device
+    if wandb_config_dict["wandb_log"]:
+        wandb.init(project="CS237B Imitation Learning",
+                config=wandb_config_dict
+               )
+
+    start_time = time.time()
+
     for epoch in range(args.epochs):
-            model.train()
-            train_loss = 0.0
-            count = 0
+        model.train()
+        train_loss = 0.0
+        count = 0
 
-            for x_batch, y_batch in train_loader:
-                x_batch = x_batch.to(device) # Shape of (batch_size,obs_dim)
-                y_batch = y_batch.to(device) # Shape of (batch_size,act_dim)
-
-
-                ######### Your code starts here #########
-                # We want to compute the loss between y_est and y where
-                # - y_est is the output of the network for a batch of observations,
-                # - y_batch is the actions the expert took for the corresponding batch of observations
-                # At the end your code should return the scalar loss value.
-                y_est = model(x_batch)
-                loss = loss_fn(y_est,y_batch)
-                loss.backward()
-
-                optimizer.step()
-                optimizer.zero_grad()
-
-                train_loss += loss.item()
-                # print("Loss: {:5f}".format(loss))
-                # print(y_est)    
+        for x_batch, y_batch in train_loader:
+            x_batch = x_batch.to(device) # Shape of (batch_size,obs_dim)
+            y_batch = y_batch.to(device) # Shape of (batch_size,act_dim)
 
 
+            ######### Your code starts here #########
+            # We want to compute the loss between y_est and y where
+            # - y_est is the output of the network for a batch of observations,
+            # - y_batch is the actions the expert took for the corresponding batch of observations
+            # At the end your code should return the scalar loss value.
+            y_est = model(x_batch)
+            loss = loss_fn(y_est,y_batch)
+            loss.backward()
 
-    
-                ########## Your code ends here ##########
-                count += 1
+            optimizer.step()
+            optimizer.zero_grad()
 
-            # pdb.set_trace()
-            avg_loss = train_loss / count if count > 0 else 0.0
+            train_loss += loss.item()
+            # print("Loss: {:5f}".format(loss))
+            # print(y_est)    
 
-            log_dict = {"Epoch":epoch+1,
-                        "Average Epoch Loss":avg_loss}
-            
+
+
+
+            ########## Your code ends here ##########
+            count += 1
+
+        # pdb.set_trace()
+        avg_loss = train_loss / count if count > 0 else 0.0
+
+        log_dict = {"Epoch":epoch+1,
+                    "Average Epoch Loss":avg_loss}
+        
+        if wandb_config_dict["wandb_log"]:
             wandb.log(log_dict)
-            print(f"Epoch {epoch + 1}, Loss: {avg_loss}")
+            
+        if epoch%wandb_config_dict['print_every'] == 0:
+            duration = time.time() - start_time
+            print("Duration: {:2f} | Epoch {} | Loss: {:.6f}".format(duration,epoch+1,avg_loss))
+            start_time = time.time()
 
 
     torch.save(model.state_dict(), policy_path)
@@ -180,6 +193,7 @@ if __name__ == '__main__':
                          'n_hidden_layer2':64,
                          'n_hidden_layer3':32,
                          'train_batch_size':4096,
-                         'wandb_log':args.wandb_log}
+                         'wandb_log':args.wandb_log,
+                         'print_every':10}
 
     nn_train(data, args,wandb_config_dict)
