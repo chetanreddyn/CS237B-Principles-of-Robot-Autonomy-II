@@ -9,6 +9,10 @@ from utils import load_data, maybe_makedirs
 import os
 import time
 
+import gym
+import gym_carlo
+from utils import *
+
 import pdb
 import wandb
 
@@ -33,6 +37,7 @@ class NN(nn.Module):
 
         nn.init.xavier_uniform_(self.hidden_layer1.weight)
         nn.init.xavier_uniform_(self.hidden_layer2.weight)
+        nn.init.xavier_uniform_(self.hidden_layer3.weight)
         nn.init.xavier_uniform_(self.output_layer.weight)
         ########## Your code ends here ##########
 
@@ -61,6 +66,15 @@ class NN(nn.Module):
             x = F.sigmoid(x)
             x = self.output_layer(x)
 
+        elif self.activation=='softsign':
+            x = self.hidden_layer1(x)
+            x = F.softsign(x)
+            x = self.hidden_layer2(x)
+            x = F.softsign(x)
+            x = self.hidden_layer3(x)
+            x = F.softsign(x)
+            x = self.output_layer(x)
+
         elif self.activation=='relu':
             x = self.hidden_layer1(x)
             x = F.relu(x)
@@ -85,11 +99,11 @@ def loss_fn(y_est, y,Q):
     # Shape of y is (batch_size,2)
     
     # Q is a 2x2 Weight matrix
-    error_vec = (y-y_est)@Q@(y-y_est).T
-    loss = torch.mean(error_vec)
+    # error_vec = (y-y_est)@Q@(y-y_est).T
+    # loss = torch.mean(error_vec)
 
 
-    return loss
+    return F.mse_loss(y_est,y)
     ########## Your code ends here ##########
     
 
@@ -107,7 +121,15 @@ def nn_train(data, args,wandb_config_dict):
     in_size = x_train.shape[-1]
     out_size = y_train.shape[-1]
 
-    
+    scenario_name = args.scenario.lower()
+    env = gym.make(scenario_name + 'Scenario-v0')
+
+    # env = gym.make(scenario_name + 'Scenario-v0')
+    if args.goal.lower() == 'all':
+        env.goal = len(goals[scenario_name])
+    else:
+        env.goal = np.argwhere(np.array(goals[scenario_name]) == args.goal.lower())[0, 0]
+
     model = NN(in_size, out_size)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using Device: ",device)
@@ -130,7 +152,7 @@ def nn_train(data, args,wandb_config_dict):
     train_loader = DataLoader(dataset, batch_size=params['train_batch_size'], shuffle=True)
     # pdb.set_trace()
 
-    wandb_config_dict['device'] = device
+    wandb_config_dict['device'] = device.type
     if wandb_config_dict["wandb_log"]:
         wandb.init(project="CS237B Imitation Learning",
                 config=wandb_config_dict
@@ -177,15 +199,66 @@ def nn_train(data, args,wandb_config_dict):
                     "Average Epoch Loss":avg_loss}
         
         if wandb_config_dict["wandb_log"]:
-            wandb.log(log_dict)
+            wandb.log(log_dict,step = epoch+1)
             
         if epoch%wandb_config_dict['print_every'] == 0:
             duration = time.time() - start_time
-            print("Duration: {:2f} | Epoch {} | Loss: {:.6f}".format(duration,epoch+1,avg_loss))
             start_time = time.time()
+
+            model.eval()
+            success_rate = nn_test(model,args,device,env)
+            print("Duration: {:2f} | Epoch {} | Loss: {:.6f} | Test Success Rate: {:.2f}".format(duration,epoch+1,avg_loss,success_rate))
+            # print("Duration: {:2f} | Epoch {} | Loss: {:.6f}".format(duration,epoch+1,avg_loss))
+
+
+            # if wandb_config_dict["wandb_log"]:
+            #     wandb.log({"Success Rate":success_rate},step=epoch+1)
+
+    if wandb_config_dict["wandb_log"]:
+        wandb.finish()
 
 
     torch.save(model.state_dict(), policy_path)
+
+def nn_test(model,args,device,env):
+
+    '''
+    The function is used to return the success rate which is logged into wandb
+    '''
+
+
+    episode_number = 100 
+    success_counter = 0
+    env.T = 200 * env.dt - env.dt / 2.  # Run for at most 200*dt = 20 seconds
+
+    for _ in range(episode_number):
+        env.seed(int(np.random.rand() * 1e6))
+        obs = env.reset()
+        done = False
+        # if args.visualize:
+        #     env.render()
+        while not done:
+            t = time.time()
+            # Convert observation to a torch tensor and send to device
+            obs_tensor = torch.tensor(np.array(obs).reshape(1, -1), dtype=torch.float32).to(device)
+            with torch.no_grad():
+                action = model(obs_tensor).cpu().numpy().reshape(-1)
+            obs, _, done, _ = env.step(action)
+            # if args.visualize:
+            #     env.render()
+            #     # Wait to maintain a 2x simulation speed
+            #     while time.time() - t < env.dt / 2:
+            #         pass
+            if done:
+                env.close()
+                # if args.visualize:
+                #     time.sleep(1)
+                if hasattr(env, 'target_reached') and env.target_reached:
+                    success_counter += 1
+
+    success_rate = float(success_counter/episode_number)
+    return success_rate
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -207,11 +280,10 @@ if __name__ == '__main__':
                          'n_hidden_layer3':32,
                          'train_batch_size':4096,
                          'wandb_log':args.wandb_log,
-                         'Q_steering':10.0,
+                         'Q_steering':2.0,
                          'Q_throttle':1.0,
-                         'print_every':10}
+                         'print_every':100,
+                         'eval_episode_number':100}
 
     nn_train(data, args,wandb_config_dict)
 
-    if wandb_config_dict["wandb_log"]:
-        wandb.finish()
