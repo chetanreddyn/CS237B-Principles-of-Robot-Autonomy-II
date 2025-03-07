@@ -73,7 +73,7 @@ class NN(nn.Module):
         ########## Your code ends here ##########
 
 
-def loss_fn(y_est, y):
+def loss_fn(y_est, y,Q):
     y = y.float()
     ######### Your code starts here #########
     # We want to compute the loss between y_est and y where
@@ -81,7 +81,15 @@ def loss_fn(y_est, y):
     # - y is the actions the expert took for the corresponding batch of observations
     # At the end your code should return the scalar loss value.
     # HINT: Remember, you can penalize steering (0th dimension) and throttle (1st dimension) unequally
-    return F.mse_loss(y_est,y)
+    
+    # Shape of y is (batch_size,2)
+    
+    # Q is a 2x2 Weight matrix
+    error_vec = (y-y_est)@Q@(y-y_est).T
+    loss = torch.mean(error_vec)
+
+
+    return loss
     ########## Your code ends here ##########
     
 
@@ -98,11 +106,16 @@ def nn_train(data, args,wandb_config_dict):
     y_train = torch.tensor(data["y_train"])
     in_size = x_train.shape[-1]
     out_size = y_train.shape[-1]
+
     
     model = NN(in_size, out_size)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using Device: ",device)
     model.to(device)
+
+    Q = np.array([[wandb_config_dict['Q_steering'],0],
+                  [0,wandb_config_dict['Q_throttle']]])
+    Q = torch.tensor(Q,device=device).float()
 
     policy_path = os.path.join("policies", f"{args.scenario.lower()}_{args.goal.lower()}_IL.pt")
     if args.restore and os.path.exists(policy_path):
@@ -141,7 +154,7 @@ def nn_train(data, args,wandb_config_dict):
             # - y_batch is the actions the expert took for the corresponding batch of observations
             # At the end your code should return the scalar loss value.
             y_est = model(x_batch)
-            loss = loss_fn(y_est,y_batch)
+            loss = loss_fn(y_est,y_batch,Q)
             loss.backward()
 
             optimizer.step()
@@ -156,8 +169,8 @@ def nn_train(data, args,wandb_config_dict):
 
             ########## Your code ends here ##########
             count += 1
+        
 
-        # pdb.set_trace()
         avg_loss = train_loss / count if count > 0 else 0.0
 
         log_dict = {"Epoch":epoch+1,
@@ -194,6 +207,11 @@ if __name__ == '__main__':
                          'n_hidden_layer3':32,
                          'train_batch_size':4096,
                          'wandb_log':args.wandb_log,
+                         'Q_steering':10.0,
+                         'Q_throttle':1.0,
                          'print_every':10}
 
     nn_train(data, args,wandb_config_dict)
+
+    if wandb_config_dict["wandb_log"]:
+        wandb.finish()
