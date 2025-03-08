@@ -1,0 +1,7 @@
+{"time":"2025-03-07T16:46:32.02191216-08:00","level":"INFO","msg":"stream: starting","core version":"0.19.8","symlink path":"/home/chetan/Desktop/CS237B/Homeworks/CS237B-Principles-of-Robot-Autonomy-II/Imitation Learning/wandb/run-20250307_164632-ivlt1uoe/logs/debug-core.log"}
+{"time":"2025-03-07T16:46:32.127408182-08:00","level":"INFO","msg":"created new stream","id":"ivlt1uoe"}
+{"time":"2025-03-07T16:46:32.127473095-08:00","level":"INFO","msg":"stream: started","id":"ivlt1uoe"}
+{"time":"2025-03-07T16:46:32.127599248-08:00","level":"INFO","msg":"writer: Do: started","stream_id":"ivlt1uoe"}
+{"time":"2025-03-07T16:46:32.127703448-08:00","level":"INFO","msg":"sender: started","stream_id":"ivlt1uoe"}
+{"time":"2025-03-07T16:46:32.127826607-08:00","level":"INFO","msg":"handler: started","stream_id":"ivlt1uoe"}
+{"time":"2025-03-07T16:46:32.334976813-08:00","level":"INFO","msg":"Starting system monitor"}

@@ -9,6 +9,7 @@ from gym_carlo.envs.interactive_controllers import KeyboardController
 from scipy.stats import multivariate_normal
 from train_ildist import NN
 from utils import *
+import pdb
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -65,8 +66,24 @@ if __name__ == '__main__':
             # - action (1 x 2 numpy array) is the current action the user took when the observation is obs
             # The code should set a variable called "probs" which is a list keeping the probabilities associated with goals[scenario_name], respectively.
             # HINT: multivariate_normal from scipy.stats might be useful, which is already imported. Or you can implement it yourself, too.
-            probs = []
+            goals_scenario = goals[scenario_name]
+            probs = np.zeros(len(goals_scenario))
+            for i,g in enumerate(goals_scenario):
+                # Eg: g = "left"
+                model_g = nn_models[g]
+                obs_tensor = torch.tensor(obs,device=device)
+                dist_params_np = model_g(obs_tensor).detach().cpu().numpy()[0] # Outputs mean and covariance, shape of mu is (1,2)
+            
+                mu = dist_params_np[:len(action)]
+                cov = dist_params_np[len(action):].reshape(len(action),len(action))
 
+                probab_g = multivariate_normal.pdf(action,mu,cov)
+                probs[i] = probab_g
+                
+
+
+            probs = (probs/probs.sum()).tolist() # Has len of 3 for the intersection env
+            # pdb.set_trace()
 
             
 

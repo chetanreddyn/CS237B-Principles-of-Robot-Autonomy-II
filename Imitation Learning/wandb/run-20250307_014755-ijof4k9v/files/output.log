@@ -1,0 +1,24 @@
+Duration: 0.383279 | Epoch 1 | Loss: 0.069505
+Duration: 28.708464 | Epoch 101 | Loss: 0.001054
+Traceback (most recent call last):
+  File "/home/chetan/Desktop/CS237B/Homeworks/CS237B-Principles-of-Robot-Autonomy-II/Imitation Learning/train_il.py", line 288, in <module>
+    nn_train(data, args,wandb_config_dict)
+  File "/home/chetan/Desktop/CS237B/Homeworks/CS237B-Principles-of-Robot-Autonomy-II/Imitation Learning/train_il.py", line 160, in nn_train
+    for x_batch, y_batch in train_loader:
+                            ^^^^^^^^^^^^
+  File "/home/chetan/anaconda3/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 708, in __next__
+    data = self._next_data()
+           ^^^^^^^^^^^^^^^^^
+  File "/home/chetan/anaconda3/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 764, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chetan/anaconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+            ~~~~~~~~~~~~^^^^^
+  File "/home/chetan/anaconda3/lib/python3.12/site-packages/torch/utils/data/dataset.py", line 211, in __getitem__
+    return tuple(tensor[index] for tensor in self.tensors)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chetan/anaconda3/lib/python3.12/site-packages/torch/utils/data/dataset.py", line 211, in <genexpr>
+    return tuple(tensor[index] for tensor in self.tensors)
+                 ~~~~~~^^^^^^^
+KeyboardInterrupt

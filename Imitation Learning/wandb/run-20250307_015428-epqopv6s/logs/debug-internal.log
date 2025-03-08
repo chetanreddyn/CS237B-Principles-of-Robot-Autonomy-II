@@ -1,0 +1,7 @@
+{"time":"2025-03-07T01:54:28.895744467-08:00","level":"INFO","msg":"stream: starting","core version":"0.19.8","symlink path":"/home/chetan/Desktop/CS237B/Homeworks/CS237B-Principles-of-Robot-Autonomy-II/Imitation Learning/wandb/run-20250307_015428-epqopv6s/logs/debug-core.log"}
+{"time":"2025-03-07T01:54:28.998584037-08:00","level":"INFO","msg":"created new stream","id":"epqopv6s"}
+{"time":"2025-03-07T01:54:28.998610017-08:00","level":"INFO","msg":"stream: started","id":"epqopv6s"}
+{"time":"2025-03-07T01:54:28.998632487-08:00","level":"INFO","msg":"writer: Do: started","stream_id":"epqopv6s"}
+{"time":"2025-03-07T01:54:28.998718937-08:00","level":"INFO","msg":"sender: started","stream_id":"epqopv6s"}
+{"time":"2025-03-07T01:54:28.998764699-08:00","level":"INFO","msg":"handler: started","stream_id":"epqopv6s"}
+{"time":"2025-03-07T01:54:29.196882833-08:00","level":"INFO","msg":"Starting system monitor"}

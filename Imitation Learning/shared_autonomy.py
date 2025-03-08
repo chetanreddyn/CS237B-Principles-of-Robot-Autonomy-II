@@ -9,6 +9,7 @@ from gym_carlo.envs.interactive_controllers import KeyboardController
 from scipy.stats import multivariate_normal
 from train_ildist import NN
 from utils import *
+import pdb
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -69,15 +70,24 @@ if __name__ == '__main__':
             # At the end, your code should set a_robot variable as a 1x2 numpy array that consists of steering and throttle values, respectively
             # HINT: You can use np.clip to threshold a_robot with respect to the magnitude constraints
            
+            na = 2
+            Pg = np.mean(scores,axis=0) # Probability mass function for the goal of shape (|G|,)
+            a_robot = np.zeros((1,na))
+            for i,g in enumerate(goals[scenario_name]):
+                goal_model = nn_models[g]
+                dist_params = goal_model(obs_tensor).detach().cpu().numpy().squeeze()
+                expected_a_human = dist_params[:na].reshape(1,2)
+ 
+                optimal_a = optimal_action[goal] # Shape of 1x2
+
+                a_robot += Pg[i]*(optimal_a - expected_a_human)
+
+                # pdb.set_trace()
+            a_robot = np.clip(a_robot,-np.array([[max_steering,max_throttle]]),-np.array([[max_steering,max_throttle]]))
 
 
 
 
-
-
-
-
-            a_robot = None # Replace this line!
             ########## Your code ends here ##########
             
             a_human = np.array([interactive_policy.steering, optimal_action[goals[scenario_name][0]][0,1]]).reshape(1,-1)
@@ -94,7 +104,23 @@ if __name__ == '__main__':
             # At the end, your code should set probs variable as a 1 x |G| numpy array that consists of the probability of each goal under obs and a_human
             # HINT: This should be very similar to the part in intent_inference.py 
 
-            probs = []
+            goals_scenario = goals[scenario_name]
+            probs = np.zeros(len(goals_scenario))
+            for i,g in enumerate(goals_scenario):
+                # Eg: g = "left"
+                model_g = nn_models[g]
+                obs_tensor = torch.tensor(obs,device=device)
+                dist_params_np = model_g(obs_tensor).detach().cpu().numpy().squeeze() # Outputs mean and covariance, shape of mu is (1,2)
+            
+                mu = dist_params_np[:na]
+                cov = dist_params_np[na:].reshape(na,na)
+
+                probab_g = multivariate_normal.pdf(a_human,mu,cov)
+                probs[i] = probab_g
+                
+
+
+            probs = (probs/probs.sum()).tolist() # Has len of 3 for the intersection env
 
 
 
@@ -110,6 +136,8 @@ if __name__ == '__main__':
             scores[-1] = probs
             
             action = a_robot + a_human
+            print(np.round(probs,1),np.round(a_human,2),np.round(a_robot,2),np.round(action,2))
+
             obs,_,done,_ = env.step(action.reshape(-1))
             env.render()
             while time.time() - t < env.dt/2.: pass # runs 2x speed. This is not great, but time.sleep() causes problems with the interactive controller

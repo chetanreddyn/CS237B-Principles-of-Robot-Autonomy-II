@@ -1,0 +1,22 @@
+/home/chetan/anaconda3/lib/python3.12/site-packages/gym/envs/registration.py:14: PkgResourcesDeprecationWarning: Parameters to load are deprecated.  Call .resolve and .require separately.
+  result = entry_point.load(False)
+Duration: 0.367092 | Epoch 1 | Loss: 0.001201 | Test Success Rate: 0.10
+Duration: 16.170669 | Epoch 51 | Loss: 0.000267 | Test Success Rate: 0.00
+Duration: 15.170567 | Epoch 101 | Loss: 0.000243 | Test Success Rate: 0.00
+Duration: 15.687045 | Epoch 151 | Loss: 0.000600 | Test Success Rate: 0.15
+Duration: 16.997174 | Epoch 201 | Loss: 0.000316 | Test Success Rate: 0.05
+Duration: 16.043323 | Epoch 251 | Loss: 0.000671 | Test Success Rate: 0.55
+Duration: 18.329533 | Epoch 301 | Loss: 0.000265 | Test Success Rate: 0.05
+Duration: 16.948919 | Epoch 351 | Loss: 0.001100 | Test Success Rate: 0.00
+Duration: 15.982183 | Epoch 401 | Loss: 0.000627 | Test Success Rate: 0.10
+Duration: 18.234604 | Epoch 451 | Loss: 0.000294 | Test Success Rate: 0.25
+Duration: 17.517109 | Epoch 501 | Loss: 0.000346 | Test Success Rate: 0.10
+Duration: 18.088337 | Epoch 551 | Loss: 0.000600 | Test Success Rate: 0.65
+Duration: 18.289355 | Epoch 601 | Loss: 0.000278 | Test Success Rate: 0.50
+Duration: 18.635088 | Epoch 651 | Loss: 0.000474 | Test Success Rate: 0.00
+Duration: 15.423429 | Epoch 701 | Loss: 0.000352 | Test Success Rate: 0.60
+Duration: 16.800318 | Epoch 751 | Loss: 0.000693 | Test Success Rate: 0.15
+Duration: 16.317543 | Epoch 801 | Loss: 0.000605 | Test Success Rate: 0.00
+Duration: 16.534495 | Epoch 851 | Loss: 0.000526 | Test Success Rate: 0.00
+Duration: 16.311082 | Epoch 901 | Loss: 0.000699 | Test Success Rate: 0.05
+Duration: 16.070220 | Epoch 951 | Loss: 0.000718 | Test Success Rate: 0.00

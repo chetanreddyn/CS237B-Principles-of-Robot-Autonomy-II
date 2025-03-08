@@ -144,7 +144,6 @@ def nn_train(data, args,wandb_config_dict):
         model.load_state_dict(torch.load(policy_path))
 
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
-    subset = 5000
     dataset = TensorDataset(x_train[:], y_train[:])
 
 
@@ -205,10 +204,10 @@ def nn_train(data, args,wandb_config_dict):
             duration = time.time() - start_time
             start_time = time.time()
 
-            model.eval()
-            success_rate = nn_test(model,args,device,env)
-            print("Duration: {:2f} | Epoch {} | Loss: {:.6f} | Test Success Rate: {:.2f}".format(duration,epoch+1,avg_loss,success_rate))
-            # print("Duration: {:2f} | Epoch {} | Loss: {:.6f}".format(duration,epoch+1,avg_loss))
+            # model.eval()
+            # success_rate = nn_test(model,args,device,env)
+            # print("Duration: {:2f} | Epoch {} | Loss: {:.6f} | Test Success Rate: {:.2f}".format(duration,epoch+1,avg_loss,success_rate))
+            print("Duration: {:2f} | Epoch {} | Loss: {:.6f}".format(duration,epoch+1,avg_loss))
 
 
             # if wandb_config_dict["wandb_log"]:
@@ -282,7 +281,7 @@ if __name__ == '__main__':
                          'wandb_log':args.wandb_log,
                          'Q_steering':2.0,
                          'Q_throttle':1.0,
-                         'print_every':100,
+                         'print_every':10,
                          'eval_episode_number':100}
 
     nn_train(data, args,wandb_config_dict)

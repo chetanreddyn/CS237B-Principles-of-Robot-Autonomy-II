@@ -1,0 +1,27 @@
+/home/chetan/anaconda3/lib/python3.12/site-packages/gym/envs/registration.py:14: PkgResourcesDeprecationWarning: Parameters to load are deprecated.  Call .resolve and .require separately.
+  result = entry_point.load(False)
+Duration: 0.366624 | Epoch 1 | Loss: 0.000946 | Test Success Rate: 0.000
+Duration: 5.826732 | Epoch 21 | Loss: 0.000399 | Test Success Rate: 0.100
+Duration: 6.936724 | Epoch 41 | Loss: 0.000429 | Test Success Rate: 0.400
+Duration: 7.124349 | Epoch 61 | Loss: 0.000471 | Test Success Rate: 0.000
+Duration: 6.601475 | Epoch 81 | Loss: 0.000314 | Test Success Rate: 0.500
+Duration: 7.455035 | Epoch 101 | Loss: 0.000377 | Test Success Rate: 0.000
+Duration: 6.424287 | Epoch 121 | Loss: 0.000502 | Test Success Rate: 0.200
+Duration: 7.632640 | Epoch 141 | Loss: 0.000617 | Test Success Rate: 0.200
+Duration: 7.459870 | Epoch 161 | Loss: 0.000500 | Test Success Rate: 0.400
+Duration: 7.243321 | Epoch 181 | Loss: 0.000367 | Test Success Rate: 0.000
+Duration: 6.107935 | Epoch 201 | Loss: 0.000257 | Test Success Rate: 0.000
+Duration: 6.078028 | Epoch 221 | Loss: 0.000373 | Test Success Rate: 0.800
+Duration: 7.040382 | Epoch 241 | Loss: 0.000651 | Test Success Rate: 0.500
+Duration: 7.209409 | Epoch 261 | Loss: 0.000378 | Test Success Rate: 0.200
+Duration: 6.931965 | Epoch 281 | Loss: 0.000997 | Test Success Rate: 0.500
+Duration: 7.460797 | Epoch 301 | Loss: 0.000782 | Test Success Rate: 0.100
+Duration: 7.112533 | Epoch 321 | Loss: 0.000133 | Test Success Rate: 0.500
+Duration: 7.478097 | Epoch 341 | Loss: 0.000500 | Test Success Rate: 0.200
+Duration: 7.688675 | Epoch 361 | Loss: 0.000576 | Test Success Rate: 0.200
+Duration: 7.305001 | Epoch 381 | Loss: 0.000316 | Test Success Rate: 0.200
+Duration: 7.053754 | Epoch 401 | Loss: 0.000352 | Test Success Rate: 0.000
+Duration: 6.620468 | Epoch 421 | Loss: 0.000469 | Test Success Rate: 0.000
+Duration: 6.765740 | Epoch 441 | Loss: 0.000297 | Test Success Rate: 0.000
+Duration: 6.322247 | Epoch 461 | Loss: 0.000355 | Test Success Rate: 0.000
+Duration: 6.955214 | Epoch 481 | Loss: 0.000338 | Test Success Rate: 0.000

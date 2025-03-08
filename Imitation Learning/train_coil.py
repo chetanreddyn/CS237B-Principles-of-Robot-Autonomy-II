@@ -7,6 +7,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import TensorDataset, DataLoader
 from utils import load_data, maybe_makedirs
+import pdb
 
 class NN(nn.Module):
     def __init__(self, in_size, out_size):
@@ -21,11 +22,25 @@ class NN(nn.Module):
         #         - nn.init.xavier_uniform_()
         #         - nn.init.kaiming_uniform_()
         # HINT: you can call self.modules() to loop through all the layers of the network in the class for initialization
+        self.hidden_layer1 = nn.Linear(in_size,32)
+        self.hidden_layer2 = nn.Linear(32,16)
 
-
-
-
-
+        self.branch1 = nn.Sequential(nn.Linear(16,8),
+                                     nn.Tanh(),
+                                     nn.Linear(8,out_size))
+        
+        self.branch2 = nn.Sequential(nn.Linear(16,8),
+                                     nn.Tanh(),
+                                     nn.Linear(8,out_size))
+        
+        self.branch3 = nn.Sequential(nn.Linear(16,8),
+                                     nn.Tanh(),
+                                     nn.Linear(8,out_size))
+        
+    
+        for layer in self.modules():
+            if isinstance(layer, nn.Linear):
+                nn.init.xavier_uniform_(layer.weight)
 
         ########## Your code ends here ##########
 
@@ -41,14 +56,18 @@ class NN(nn.Module):
         # - u is a (?, 1) tensor (a vector indeed) that keeps the high-level commands (goals) to denote which branch of the network to use 
         # HINT 1: Looping over all data samples may not be the most computationally efficient way of doing branching
         # HINT 2: While implementing this, we found using masks useful. This is not necessarily a requirement though.
-        
+        x = self.hidden_layer1(x)
+        x = F.tanh(x)
+        x = self.hidden_layer2(x)
+        x = F.tanh(x)
 
+        x1 = self.branch1(x) # Shape of (batch_size,out_size)
+        x2 = self.branch2(x) # Shape of (batch_size,out_size)
+        x3 = self.branch3(x) # Shape of (batch_size,out_size)
 
-
-
-
-
-
+        x_stacked = torch.stack((x1,x2,x3),dim=1) # Shape of (batch_size,3,out_size)
+        output = x_stacked[torch.arange(x.size(0)),u]
+        return output # Shape of batch_size, out_size
         ########## Your code ends here ##########
 
 
@@ -64,9 +83,9 @@ def loss_fn(y_est, y):
 
 
 
-
+    return F.mse_loss(y_est,y)
     ########## Your code ends here ##########
-   
+
 
 def train_model(data, args):
     """
@@ -103,7 +122,14 @@ def train_model(data, args):
             u_batch = u_batch.to(device)
             
             ######### Your code starts here #########
+            y_est = model(x_batch,u_batch)
+            loss = loss_fn(y_est,y_batch)
 
+            loss.backward()
+            optimizer.step()
+            optimizer.zero_grad()
+
+            epoch_loss += loss
             
 
 

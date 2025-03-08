@@ -1,0 +1,12 @@
+/home/chetan/anaconda3/lib/python3.12/site-packages/gym/envs/registration.py:14: PkgResourcesDeprecationWarning: Parameters to load are deprecated.  Call .resolve and .require separately.
+  result = entry_point.load(False)
+Duration: 0.379064 | Epoch 1 | Loss: 0.053470 | Test Success Rate: 0.00
+Duration: 15.472928 | Epoch 51 | Loss: 0.000688 | Test Success Rate: 0.05
+Duration: 16.783261 | Epoch 101 | Loss: 0.000744 | Test Success Rate: 0.15
+Duration: 17.073688 | Epoch 151 | Loss: 0.001102 | Test Success Rate: 0.10
+Duration: 17.584094 | Epoch 201 | Loss: 0.000972 | Test Success Rate: 0.15
+Duration: 16.436582 | Epoch 251 | Loss: 0.000948 | Test Success Rate: 0.00
+Duration: 17.093087 | Epoch 301 | Loss: 0.000853 | Test Success Rate: 0.10
+Duration: 16.687900 | Epoch 351 | Loss: 0.000759 | Test Success Rate: 0.05
+Duration: 16.613743 | Epoch 401 | Loss: 0.000489 | Test Success Rate: 0.30
+Duration: 17.219322 | Epoch 451 | Loss: 0.000161 | Test Success Rate: 0.20

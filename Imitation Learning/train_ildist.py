@@ -19,11 +19,13 @@ class NN(nn.Module):
         # HINT: You can use either of the following for weight initialization:
         #         - nn.init.xavier_uniform_()
         #         - nn.init.kaiming_uniform_()
+        self.out_size = out_size
+        self.hidden_layer1 = nn.Linear(in_size,8)
+        self.hidden_layer2 = nn.Linear(8,4)
+        self.output_layer = nn.Linear(4,out_size + out_size*out_size)
 
-
-
-
-
+        self.activation = 'tanh'
+        self.epsilon = 1e-6
         ########## Your code ends here ##########
 
     def forward(self, x):
@@ -31,9 +33,35 @@ class NN(nn.Module):
         ######### Your code starts here #########
         # We want to perform a forward-pass of the network.
         # x is a (?, |O|) tensor that keeps a batch of observations
+        if self.activation=='tanh':
+            x = self.hidden_layer1(x)
+            x = F.tanh(x)
+            x = self.hidden_layer2(x)
+            x = F.tanh(x)
+            x = self.output_layer(x)
 
+        elif self.activation=='sigmoid':
+            x = self.hidden_layer1(x)
+            x = F.sigmoid(x)
+            x = self.hidden_layer2(x)
+            x = F.sigmoid(x)
+            x = self.output_layer(x)
 
+        elif self.activation=='relu':
+            x = self.hidden_layer1(x)
+            x = F.relu(x)
+            x = self.hidden_layer2(x)
+            x = F.relu(x)
+            x = self.output_layer(x)
 
+        mu = x[:,:self.out_size]
+        A = x[:,self.out_size:].view(-1,self.out_size,self.out_size)
+        Sigma = torch.bmm(A,A.transpose(1,2)) + self.epsilon*torch.eye(self.out_size,device=x.device).unsqueeze(0)
+
+        Sigma_flat = Sigma.view(-1,self.out_size*self.out_size)
+
+        dist_params = torch.cat((mu,Sigma_flat),dim=1)
+        return dist_params
         ########## Your code ends here ##########
 
 
@@ -57,7 +85,21 @@ def loss_fn(y_est, y):
     #       - torch.diag_embed()
     #       - torch.bmm()
     #       - F.softplus()
+    # mu = y_est[:, :2] 
+    # A = y_est[:, 2:].view(-1, 2, 2) 
     
+    # covariance = torch.bmm(A, A.transpose(1, 2))
+    
+    # # Add jitter for numerical stability
+    # jitter = 1e-6 * torch.eye(2, device=y.device).unsqueeze(0)
+    # covariance += jitter
+    mu = y_est[:,:2]
+    covariance = y_est[:,2:].view(-1,2,2)
+    
+    # Compute log probability under Multivariate Gaussian
+    distribution = D.MultivariateNormal(mu, covariance_matrix=covariance)
+    log_probs = distribution.log_prob(y)
+    return -log_probs.mean()  # Negative mean log-likelihood
     
 
 
@@ -97,11 +139,14 @@ def train_model(data, args):
 
             ######### Your code starts here #########
             # HINT: This section is very similar to the section in train_il.py
+            y_est = model(x_batch)
+            loss = loss_fn(y_est,y_batch)
+            loss.backward()
 
+            optimizer.step()
+            optimizer.zero_grad()
 
-
-
-
+            train_loss += loss.item()
             ########## Your code ends here ##########
             count += 1
 
